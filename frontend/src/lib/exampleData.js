@@ -3,7 +3,7 @@ import examplePost2Image from "@/assets/example-post-2.jpg";
 
 export const examplePosts = [
 	{
-		uuid: "example-post-1",
+		slug: "example-post-1",
 		title: "How to Find a Good Duo Partner for League",
 		excerpt: "Apparently harder than finding a spouse.",
 		imageUrl: examplePost1Image,
@@ -11,7 +11,7 @@ export const examplePosts = [
 		category: { name: "League of Legends" }
 	},
 	{
-		uuid: "example-post-2",
+		slug: "example-post-2",
 		title: "How to Get Over Lose Streaks",
 		excerpt:
 			"Sometimes, through no fault of your own, you find yourself on a losing streak. Here's how to cope.",

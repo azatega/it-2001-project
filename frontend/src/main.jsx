@@ -8,6 +8,8 @@ import { Home } from "@/pages/Home";
 import { SinglePost } from "@/pages/SinglePost";
 import { Login } from "@/pages/Login";
 import { Signup } from "@/pages/Signup";
+import { NewPost } from "@/pages/NewPost";
+import { EditPost } from "@/pages/EditPost";
 
 const router = createBrowserRouter([
     {
@@ -15,8 +17,16 @@ const router = createBrowserRouter([
         element: <Home />,
     },
     {
-        path: "/posts/:postUUID",
+        path: "/posts/:postSlug",
         element: <SinglePost />,
+    },
+    {
+        path: "/posts/:postSlug/edit",
+        element: <EditPost />,
+    },
+    {
+        path: "/posts/new",
+        element: <NewPost />,
     },
     {
         path: "/login",

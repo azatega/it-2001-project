@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 export function PostCard({ post }) {
     return (
-        <Link to={`/posts/${post.uuid}`} className="focus:outline-none">
+        <Link to={`/posts/${post.slug}`} className="focus:outline-none">
             <article className="flex flex-col items-start justify-between hover:-translate-y-1 transition ease-in-out">
                 <div className="relative w-full">
                     <img

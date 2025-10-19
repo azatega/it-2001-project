@@ -18,8 +18,10 @@ export function Home() {
                     </p>
 
                     <div className="mt-4 flex gap-4 justify-center">
-                        <Button>
-                            <SendIcon className="size-4" /> New Post
+                        <Button asChild>
+                            <Link to="/posts/new">
+                                <SendIcon className="size-4" /> New Post
+                            </Link>
                         </Button>
 
                         <Button asChild variant="outline">
@@ -31,7 +33,7 @@ export function Home() {
                 </div>
                 <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                     {examplePosts.map((post) => (
-                        <PostCard key={post.uuid} post={post} />
+                        <PostCard key={post.slug} post={post} />
                     ))}
                 </div>
             </Container>

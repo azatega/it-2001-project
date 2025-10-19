@@ -17,6 +17,7 @@ To run the backend in the backend folder run:
 - [ShadCn](https://ui.shadcn.com/)
 - [TanStack Query](https://tanstack.com/query/latest)
 - [React Hook Form](https://react-hook-form.com/)
+- [Suneditor-React](https://github.com/mkhstar/suneditor-react)
 
 ## Backend
-- [Flightphp](https://docs.flightphp.com/)
+- [FlightPHP](https://docs.flightphp.com/)

@@ -12,15 +12,15 @@ import {
     TrashIcon,
 } from "lucide-react";
 import { useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, Navigate, useParams } from "react-router";
 
 export function SinglePost() {
-    const { postUUID } = useParams();
-    const post = examplePosts.find((post) => post.uuid == postUUID);
+    const { postSlug } = useParams();
+    const post = examplePosts.find((post) => post.slug == postSlug);
 
     const [isLiked, setIsLiked] = useState(false);
 
-    if (!post) return null;
+    if (!post) return <Navigate to="/" />;
 
     return (
         <Container className="py-8 max-w-3xl">
@@ -75,8 +75,10 @@ export function SinglePost() {
                 <Button variant="outline">
                     <TrashIcon /> Delete
                 </Button>
-                <Button variant="outline">
-                    <EditIcon /> Edit
+                <Button asChild variant="outline">
+                    <Link to={`/posts/${post.slug}/edit`}>
+                        <EditIcon /> Edit
+                    </Link>
                 </Button>
                 <Button
                     className={"w-20"}
