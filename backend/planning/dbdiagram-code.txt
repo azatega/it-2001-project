@@ -1,0 +1,39 @@
+Table users {
+  id int [pk]
+  display_name varchar
+  username varchar
+  password varchar
+  role varchar
+}
+
+Table categories {
+  id int [pk]
+  name varchar
+  slug varchar
+}
+
+Table posts {
+  id int [pk]
+  slug varchar
+  title varchar
+  date_published date
+  excerpt text
+  content text
+  image varchar
+  category_id int [ref: > categories.id]
+}
+
+Table comments {
+  id int [pk]
+  post_id int [ref: > posts.id]
+  user_id int [ref: > users.id]
+  timestamp datetime
+  content text
+}
+
+Table post_likes {
+  id int [pk]
+  post_id int [ref: > posts.id]
+  user_id int [ref: > users.id]
+  timestamp datetime
+}

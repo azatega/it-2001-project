@@ -21,3 +21,4 @@ To run the backend in the backend folder run:
 
 ## Backend
 - [FlightPHP](https://docs.flightphp.com/)
+- [dbdiagram.io](https://dbdiagram.io/) for the ERD diagram
