@@ -13,6 +13,7 @@ To run the backend in the backend folder run:
 - [React](https://react.dev/)
 - [React Router, data mode](https://reactrouter.com/home)
 - [TailwindCSS](https://tailwindcss.com/)
+- [Tailwind Plus UI Blocks](https://tailwindcss.com/plus/ui-blocks/)
 - [ShadCn](https://ui.shadcn.com/)
 - [TanStack Query](https://tanstack.com/query/latest)
 - [React Hook Form](https://react-hook-form.com/)

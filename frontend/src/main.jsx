@@ -4,15 +4,12 @@ import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import "./index.css";
 import { Button } from "@/components/ui/button";
+import { Home } from "@/pages/Home";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: (
-            <div className="p-4">
-                <Button size="lg">Hello</Button>
-            </div>
-        ),
+        element: <Home />,
     },
 ]);
 
