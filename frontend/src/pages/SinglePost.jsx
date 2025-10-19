@@ -1,8 +1,16 @@
 import { PostMeta } from "@/components/PostMeta";
+import { BackButton } from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { Textarea } from "@/components/ui/textarea";
 import { examplePosts } from "@/lib/exampleData";
-import { ArrowLeft, HeartIcon } from "lucide-react";
+import {
+    ArrowLeft,
+    EditIcon,
+    HeartIcon,
+    SendIcon,
+    TrashIcon,
+} from "lucide-react";
 import { useState } from "react";
 import { Link, useParams } from "react-router";
 
@@ -16,12 +24,7 @@ export function SinglePost() {
 
     return (
         <Container className="py-8 max-w-3xl">
-            <Link
-                to="/"
-                className="flex gap-1.5 items-center text-base text-gray-700 hover:text-black"
-            >
-                <ArrowLeft className="size-5" /> Go back
-            </Link>
+            <BackButton />
             <img
                 src={post.imageUrl}
                 className="mt-6 w-full aspect-[16/9] object-cover rounded-xl"
@@ -68,17 +71,38 @@ export function SinglePost() {
                 </p>
             </article>
 
-            <Button
-                className={"mt-6 w-20"}
-                onClick={() => setIsLiked(!isLiked)}
-                variant="outline"
-            >
-                <HeartIcon
-                    className="text-red-500"
-                    fill={isLiked ? "currentColor" : "transparent"}
-                />{" "}
-                {isLiked ? "1" : "0"}
-            </Button>
+            <div className="flex mt-6 gap-4 items-center justify-end">
+                <Button variant="outline">
+                    <TrashIcon /> Delete
+                </Button>
+                <Button variant="outline">
+                    <EditIcon /> Edit
+                </Button>
+                <Button
+                    className={"w-20"}
+                    onClick={() => setIsLiked(!isLiked)}
+                    variant="outline"
+                >
+                    <HeartIcon
+                        className={isLiked ? "text-red-500" : ""}
+                        fill={isLiked ? "currentColor" : "transparent"}
+                    />{" "}
+                    {isLiked ? "1" : "0"}
+                </Button>
+            </div>
+            <hr className="my-8" />
+            <div>
+                <Textarea
+                    rows={5}
+                    className={"h-28"}
+                    placeholder="Leave a comment..."
+                ></Textarea>
+                <div className="flex">
+                    <Button className="mt-3 ml-auto" size="lg">
+                        <SendIcon /> Comment
+                    </Button>
+                </div>
+            </div>
         </Container>
     );
 }

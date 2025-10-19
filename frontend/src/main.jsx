@@ -6,6 +6,8 @@ import "./index.css";
 import { Button } from "@/components/ui/button";
 import { Home } from "@/pages/Home";
 import { SinglePost } from "@/pages/SinglePost";
+import { Login } from "@/pages/Login";
+import { Signup } from "@/pages/Signup";
 
 const router = createBrowserRouter([
     {
@@ -15,6 +17,14 @@ const router = createBrowserRouter([
     {
         path: "/posts/:postUUID",
         element: <SinglePost />,
+    },
+    {
+        path: "/login",
+        element: <Login />,
+    },
+    {
+        path: "/signup",
+        element: <Signup />,
     },
 ]);
 
