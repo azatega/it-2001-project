@@ -18,12 +18,4 @@ class PostDao extends BaseDao
 		$stmt->execute();
 		return $stmt->fetch();
 	}
-
-	public function getByCategoryId($category_id)
-	{
-		$stmt = $this->connection->prepare("SELECT * FROM " . $this->table_name . " WHERE category_id = :category_id");
-		$stmt->bindParam(':category_id', $category_id);
-		$stmt->execute();
-		return $stmt->fetchAll();
-	}
 }

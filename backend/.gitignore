@@ -5,3 +5,5 @@ composer.lock
 .vagrant/
 .runway-creds.json
 .env
+uploads/*
+!uploads/.gitkeep

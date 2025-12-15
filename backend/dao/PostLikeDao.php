@@ -34,4 +34,12 @@ class PostLikeDao extends BaseDao
 		$stmt->execute([':post_id' => $post_id, ':user_id' => $user_id]);
 		return $stmt->rowCount() > 0;
 	}
+
+	public function getLikeCount($post_id)
+	{
+		$stmt = $this->connection->prepare("SELECT COUNT(*) as count FROM " . $this->table_name . " WHERE post_id = :post_id");
+		$stmt->execute([':post_id' => $post_id]);
+		$result = $stmt->fetch();
+		return $result['count'];
+	}
 }
