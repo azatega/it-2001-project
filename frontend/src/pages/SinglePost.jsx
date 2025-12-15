@@ -11,15 +11,35 @@ import {
     SendIcon,
     TrashIcon,
 } from "lucide-react";
-import { useState } from "react";
 import { Link, Navigate, useParams, useNavigate } from "react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getPost, whoami, deletePost, likePost, unlikePost } from "@/lib/api";
+import { useForm } from "react-hook-form";
+import {
+    getPost,
+    whoami,
+    deletePost,
+    likePost,
+    unlikePost,
+    getComments,
+    createComment,
+} from "@/lib/api";
 
 export function SinglePost() {
     const { postSlug } = useParams();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm({
+        defaultValues: {
+            content: "",
+        },
+    });
+
     const {
         data: post,
         isLoading,
@@ -33,6 +53,12 @@ export function SinglePost() {
         queryKey: ["whoami"],
         queryFn: whoami,
         retry: false,
+    });
+
+    const { data: comments = [] } = useQuery({
+        queryKey: ["comments", post?.id],
+        queryFn: () => getComments(post.id),
+        enabled: !!post?.id,
     });
 
     const deleteMutation = useMutation({
@@ -51,11 +77,28 @@ export function SinglePost() {
         },
     });
 
+    const commentMutation = useMutation({
+        mutationFn: (data) => {
+            return createComment({
+                post_id: post.id,
+                content: data.content,
+            });
+        },
+        onSuccess: () => {
+            reset();
+            queryClient.invalidateQueries({ queryKey: ["comments", post.id] });
+        },
+    });
+
     const user = whoamiData?.data;
     const isAdmin = user?.role === "admin";
 
     const handleDelete = () => {
         deleteMutation.mutate(post.id);
+    };
+
+    const onSubmit = (data) => {
+        commentMutation.mutate(data);
     };
 
     if (isLoading) {
@@ -118,16 +161,63 @@ export function SinglePost() {
             </div>
             <hr className="my-8" />
             <div>
-                <Textarea
-                    rows={5}
-                    className={"h-28"}
-                    placeholder="Leave a comment..."
-                ></Textarea>
-                <div className="flex">
-                    <Button className="mt-3 ml-auto" size="lg">
-                        <SendIcon /> Comment
-                    </Button>
-                </div>
+                {comments.length === 0 ? (
+                    <p className="text-gray-500 mb-6">
+                        No comments yet. Be the first to comment!
+                    </p>
+                ) : (
+                    <div className="space-y-4 mb-6">
+                        {comments.map((comment) => (
+                            <div
+                                key={comment.id}
+                                className="border rounded-lg p-4"
+                            >
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="font-semibold">
+                                        {comment.username}
+                                    </span>
+                                    <span className="text-sm text-gray-500">
+                                        {new Date(
+                                            comment.timestamp
+                                        ).toLocaleString()}
+                                    </span>
+                                </div>
+                                <p className="text-gray-700">
+                                    {comment.content}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Textarea
+                        rows={5}
+                        className={"h-28"}
+                        placeholder="Leave a comment..."
+                        disabled={!user}
+                        {...register("content", {
+                            required: "Comment cannot be empty",
+                            validate: (value) =>
+                                value.trim().length > 0 ||
+                                "Comment cannot be empty",
+                        })}
+                    />
+                    {errors.content && (
+                        <p className="text-sm text-red-500 mt-1">
+                            {errors.content.message}
+                        </p>
+                    )}
+                    <div className="flex">
+                        <Button
+                            className="mt-3 ml-auto"
+                            size="lg"
+                            type="submit"
+                            disabled={!user || commentMutation.isPending}
+                        >
+                            <SendIcon /> Comment
+                        </Button>
+                    </div>
+                </form>
             </div>
         </Container>
     );

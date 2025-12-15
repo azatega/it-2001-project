@@ -151,3 +151,14 @@ export async function unlikePost(postId) {
 		method: 'POST',
 	});
 }
+
+export async function getComments(postId) {
+	return request(`api/posts/${postId}/comments`);
+}
+
+export async function createComment(commentData) {
+	return request('api/comments', {
+		method: 'POST',
+		body: JSON.stringify(commentData),
+	});
+}
