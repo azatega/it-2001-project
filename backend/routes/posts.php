@@ -24,13 +24,13 @@ Flight::route(
 		$postLikeService = new PostLikeService();
 		$post['like_count'] = $postLikeService->getLikeCount($post['id']);
 
-		$user_id = Flight::request()->query->user_id ?? null;
-		if ($user_id)
-			$post['is_liked'] = $postLikeService->isLiked($post['id'], $user_id);
+		$user = Flight::get('user');
+		if ($user)
+			$post['is_liked'] = $postLikeService->isLiked($post['id'], $user->id);
 
 		Flight::json($post);
 	}
-);
+)->addMiddleware(JWTMiddleware::class);
 
 // Create post
 Flight::route(

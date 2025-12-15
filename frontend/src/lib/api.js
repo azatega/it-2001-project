@@ -139,3 +139,15 @@ export async function whoami() {
 export function logout() {
 	localStorage.removeItem('jwt_token');
 }
+
+export async function likePost(postId) {
+	return request(`api/posts/${postId}/like`, {
+		method: 'POST',
+	});
+}
+
+export async function unlikePost(postId) {
+	return request(`api/posts/${postId}/unlike`, {
+		method: 'POST',
+	});
+}

@@ -13,12 +13,13 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link, Navigate, useParams, useNavigate } from "react-router";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { getPost, whoami, deletePost } from "@/lib/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getPost, whoami, deletePost, likePost, unlikePost } from "@/lib/api";
 
 export function SinglePost() {
     const { postSlug } = useParams();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const {
         data: post,
         isLoading,
@@ -41,7 +42,14 @@ export function SinglePost() {
         },
     });
 
-    const [isLiked, setIsLiked] = useState(false);
+    const likeMutation = useMutation({
+        mutationFn: ({ postId, isLiked }) => {
+            return isLiked ? unlikePost(postId) : likePost(postId);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["post", postSlug] });
+        },
+    });
 
     const user = whoamiData?.data;
     const isAdmin = user?.role === "admin";
@@ -92,14 +100,20 @@ export function SinglePost() {
                 )}
                 <Button
                     className={"w-20"}
-                    onClick={() => setIsLiked(!isLiked)}
+                    onClick={() =>
+                        likeMutation.mutate({
+                            postId: post.id,
+                            isLiked: post.is_liked,
+                        })
+                    }
                     variant="outline"
+                    disabled={!user || likeMutation.isPending}
                 >
                     <HeartIcon
-                        className={isLiked ? "text-red-500" : ""}
-                        fill={isLiked ? "currentColor" : "transparent"}
+                        className={post.is_liked ? "text-red-500" : ""}
+                        fill={post.is_liked ? "currentColor" : "transparent"}
                     />{" "}
-                    {isLiked ? "1" : "0"}
+                    {post.like_count}
                 </Button>
             </div>
             <hr className="my-8" />
