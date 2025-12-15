@@ -1,11 +1,10 @@
 import { PostCard } from "@/components/PostCard";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { examplePosts } from "@/lib/exampleData";
 import { LogInIcon, LogOutIcon, SendIcon } from "lucide-react";
 import { Link } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { whoami, logout } from "@/lib/api";
+import { whoami, logout, getPosts } from "@/lib/api";
 
 export function Home() {
     const queryClient = useQueryClient();
@@ -15,9 +14,16 @@ export function Home() {
         retry: false,
     });
 
+    const { data: postsData, isLoading: postsLoading } = useQuery({
+        queryKey: ["posts"],
+        queryFn: getPosts,
+    });
+
     const user = whoamiData?.data;
     const isLoggedIn = !!user;
     const isAdmin = user?.role === "admin";
+
+    const posts = postsData || [];
 
     const handleLogout = () => {
         logout();
@@ -60,9 +66,19 @@ export function Home() {
                     </div>
                 </div>
                 <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                    {examplePosts.map((post) => (
-                        <PostCard key={post.slug} post={post} />
-                    ))}
+                    {postsLoading ? (
+                        <p className="text-center col-span-3 text-gray-500">
+                            Loading posts...
+                        </p>
+                    ) : posts.length === 0 ? (
+                        <p className="text-center col-span-3 text-gray-500">
+                            No posts yet. {isAdmin && "Create your first post!"}
+                        </p>
+                    ) : (
+                        posts.map((post) => (
+                            <PostCard key={post.slug} post={post} />
+                        ))
+                    )}
                 </div>
             </Container>
         </div>

@@ -17,7 +17,12 @@ export async function request(endpoint, options = {}) {
 	};
 
 	const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
-	const data = await response.json();
+
+	// Check if response is JSON before parsing
+	const contentType = response.headers.get('content-type');
+	const data = contentType?.includes('application/json')
+		? await response.json()
+		: {};
 
 	if (!response.ok)
 		throw new Error(data.error || `HTTP error! status: ${response.status}`);
@@ -35,6 +40,64 @@ export async function getPost(slug) {
 
 export async function getPostComments(postId) {
 	return request(`api/posts/${postId}/comments`);
+}
+
+export async function createPost(formData) {
+	const token = localStorage.getItem('jwt_token');
+
+	const headers = {};
+	if (token)
+		headers['Authorization'] = `Bearer ${token}`;
+
+	const config = {
+		method: 'POST',
+		headers,
+		body: formData, // FormData for file upload
+	};
+
+	const response = await fetch(`${API_BASE_URL}api/posts`, config);
+
+	// Check if response is JSON before parsing
+	const contentType = response.headers.get('content-type');
+	const data = contentType?.includes('application/json')
+		? await response.json()
+		: {};
+
+	if (!response.ok)
+		throw new Error(data.error || `HTTP error! status: ${response.status}`);
+
+	return data;
+}
+
+export async function updatePost(id, formData) {
+	const token = localStorage.getItem('jwt_token');
+
+	const headers = {};
+	if (token)
+		headers['Authorization'] = `Bearer ${token}`;
+
+	const config = {
+		method: 'POST', // Using POST instead of PUT for multipart/form-data compatibility
+		headers,
+		body: formData, // FormData for file upload
+	};
+
+	const response = await fetch(`${API_BASE_URL}api/posts/${id}`, config);
+
+	// Check if response is JSON before parsing
+	const contentType = response.headers.get('content-type');
+	const data = contentType?.includes('application/json')
+		? await response.json()
+		: {};
+
+	if (!response.ok)
+		throw new Error(data.error || `HTTP error! status: ${response.status}`);
+
+	return data;
+}
+
+export async function getCategories() {
+	return request('api/categories');
 }
 
 export async function login(username, password) {
@@ -61,6 +124,12 @@ export async function register(userData) {
 	}
 
 	return response;
+}
+
+export async function deletePost(id) {
+	return request(`api/posts/${id}`, {
+		method: 'DELETE',
+	});
 }
 
 export async function whoami() {

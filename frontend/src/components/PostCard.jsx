@@ -1,4 +1,5 @@
 import { PostMeta } from "@/components/PostMeta";
+import { API_BASE_URL } from "@/lib/constants";
 import { HeartIcon } from "lucide-react";
 import { Link } from "react-router";
 
@@ -9,7 +10,9 @@ export function PostCard({ post }) {
                 <div className="relative w-full">
                     <img
                         alt=""
-                        src={post.imageUrl}
+                        src={
+                            post.image && `${API_BASE_URL}uploads/${post.image}`
+                        }
                         className="aspect-video w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]"
                     />
                     <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />

@@ -41,9 +41,9 @@ Flight::route(
 	}
 )->addMiddleware(RequireAdmin::class);
 
-// Update post
+// Update post - using POST due to PHP multipart/form-data limitation with PUT
 Flight::route(
-	'PUT /api/posts/@id',
+	'POST /api/posts/@id',
 	function ($id) use ($postService) {
 		$data = Flight::request()->data->getData();
 		$postService->update($id, $data);
