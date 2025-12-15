@@ -10,7 +10,7 @@ Flight::route(
 		$comments = $commentService->getAll();
 		Flight::json($comments);
 	}
-);
+)->addMiddleware(RequireAdmin::class);
 
 // Get comment by ID
 Flight::route(
@@ -36,24 +36,50 @@ Flight::route(
 Flight::route(
 	'POST /api/comments',
 	function () use ($commentService) {
+		$user = Flight::get('user');
+
 		$data = Flight::request()->data->getData();
+		// Ensure the user_id is set to the authenticated user
+		$data['user_id'] = $user->id;
 		$commentService->create($data);
 	}
-);
+)->addMiddleware(RequireUser::class);
 
 // Update comment
 Flight::route(
 	'PUT /api/comments/@id',
 	function ($id) use ($commentService) {
+		$user = Flight::get('user');
+
+		// Get the comment to check ownership
+		$comment = $commentService->getById($id);
+		if (!$comment)
+			Flight::halt(404, json_encode(['error' => 'Comment not found']));
+
+		// Check if user is admin or owner of the comment
+		if ($user->role !== 'admin' && $comment['user_id'] != $user->id)
+			Flight::halt(403, json_encode(['error' => 'Forbidden: You can only update your own comments']));
+
 		$data = Flight::request()->data->getData();
 		$commentService->update($id, $data);
 	}
-);
+)->addMiddleware(RequireUser::class);
 
 // Delete comment
 Flight::route(
 	'DELETE /api/comments/@id',
 	function ($id) use ($commentService) {
+		$user = Flight::get('user');
+
+		// Get the comment to check ownership
+		$comment = $commentService->getById($id);
+		if (!$comment)
+			Flight::halt(404, json_encode(['error' => 'Comment not found']));
+
+		// Check if user is admin or owner of the comment
+		if ($user->role !== 'admin' && $comment['user_id'] != $user->id)
+			Flight::halt(403, json_encode(['error' => 'Forbidden: You can only delete your own comments']));
+
 		$commentService->delete($id);
 	}
-);
+)->addMiddleware(RequireUser::class);

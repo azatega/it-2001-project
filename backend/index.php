@@ -1,6 +1,10 @@
 <?php
 // Run autoloader
 require 'vendor/autoload.php';
+require __DIR__ . '/config.php';
+require __DIR__ . '/middleware/JWTMiddleware.php';
+require __DIR__ . '/middleware/RequireAdmin.php';
+require __DIR__ . '/middleware/RequireUser.php';
 
 Flight::route('/', function () {
 	Flight::json([
@@ -13,9 +17,8 @@ Flight::route('/', function () {
 Flight::route('/uploads/@filename', function ($filename) {
 	$filePath = __DIR__ . '/uploads/' . basename($filename);
 
-	if (!file_exists($filePath)) {
+	if (!file_exists($filePath))
 		Flight::halt(404, 'Image not found');
-	}
 
 	// Get file extension and set appropriate content type
 	$extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
@@ -34,6 +37,7 @@ Flight::route('/uploads/@filename', function ($filename) {
 	exit;
 });
 
+require __DIR__ . '/routes/auth.php';
 require __DIR__ . '/routes/users.php';
 require __DIR__ . '/routes/posts.php';
 require __DIR__ . '/routes/comments.php';

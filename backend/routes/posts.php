@@ -39,7 +39,7 @@ Flight::route(
 		$data = Flight::request()->data->getData();
 		$postService->create($data);
 	}
-);
+)->addMiddleware(RequireAdmin::class);
 
 // Update post
 Flight::route(
@@ -48,7 +48,7 @@ Flight::route(
 		$data = Flight::request()->data->getData();
 		$postService->update($id, $data);
 	}
-);
+)->addMiddleware(RequireAdmin::class);
 
 // Delete post
 Flight::route(
@@ -56,4 +56,4 @@ Flight::route(
 	function ($id) use ($postService) {
 		$postService->delete($id);
 	}
-);
+)->addMiddleware(RequireAdmin::class);

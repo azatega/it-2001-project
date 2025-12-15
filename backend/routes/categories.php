@@ -10,7 +10,7 @@ Flight::route(
 		$categories = $categoryService->getAll();
 		Flight::json($categories);
 	}
-);
+)->addMiddleware(RequireAdmin::class);
 
 // Get category by ID
 Flight::route(
@@ -22,7 +22,7 @@ Flight::route(
 
 		Flight::json($category);
 	}
-);
+)->addMiddleware(RequireAdmin::class);
 
 // Create category
 Flight::route(
@@ -31,7 +31,7 @@ Flight::route(
 		$data = Flight::request()->data->getData();
 		$categoryService->create($data);
 	}
-);
+)->addMiddleware(RequireAdmin::class);
 
 // Update category
 Flight::route(
@@ -40,7 +40,7 @@ Flight::route(
 		$data = Flight::request()->data->getData();
 		$categoryService->update($id, $data);
 	}
-);
+)->addMiddleware(RequireAdmin::class);
 
 // Delete category
 Flight::route(
@@ -48,4 +48,4 @@ Flight::route(
 	function ($id) use ($categoryService) {
 		$categoryService->delete($id);
 	}
-);
+)->addMiddleware(RequireAdmin::class);

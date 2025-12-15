@@ -9,52 +9,50 @@ Flight::route(
 	function () use ($userService) {
 		$users = $userService->getAll();
 		// Remove passwords from response
-		foreach ($users as &$user) {
-			unset($user['password']);
+		foreach ($users as &$user_data) {
+			unset($user_data['password']);
 		}
 		Flight::json($users);
 	}
-);
+)->addMiddleware(RequireAdmin::class);
 
 // Get user by ID
 Flight::route(
 	'GET /api/users/@id',
 	function ($id) use ($userService) {
-		$user = $userService->getById($id);
-		if (!$user)
+		$user = Flight::get('user');
+
+		// Users can only view their own profile unless they're admin
+		if ($user->role !== 'admin' && $user->id != $id)
+			Flight::halt(403, json_encode(['error' => 'Forbidden: You can only view your own profile']));
+
+		$user_data = $userService->getById($id);
+		if (!$user_data)
 			throw new Exception('User not found');
-		unset($user['password']);
-		Flight::json($user);
+		unset($user_data['password']);
+		Flight::json($user_data);
 	}
-);
-
-// Register new user
-Flight::route(
-	'POST /api/users/register',
-	function () use ($userService) {
-		$data = Flight::request()->data->getData();
-		$userService->register($data);
-	}
-);
-
-// Login user
-Flight::route(
-	'POST /api/users/login',
-	function () use ($userService) {
-		$data = Flight::request()->data->getData();
-		$user = $userService->login($data['username'], $data['password']);
-		Flight::json($user);
-	}
-);
+)->addMiddleware(RequireUser::class);
 
 // Update user
 Flight::route(
 	'PUT /api/users/@id',
 	function ($id) use ($userService) {
+		$user = Flight::get('user');
+
+		// Users can only update their own profile unless they're admin
+		if ($user->role !== 'admin' && $user->id != $id)
+			Flight::halt(403, json_encode(['error' => 'Forbidden: You can only update your own profile']));
+
 		$data = Flight::request()->data->getData();
+
+		// Prevent non-admins from changing their own role
+		if ($user->role !== 'admin' && isset($data['role']))
+			unset($data['role']);
+
 		$userService->update($id, $data);
 	}
-);
+)->addMiddleware(RequireUser::class);
 
 // Delete user
 Flight::route(
@@ -62,4 +60,4 @@ Flight::route(
 	function ($id) use ($userService) {
 		$userService->delete($id);
 	}
-);
+)->addMiddleware(RequireAdmin::class);

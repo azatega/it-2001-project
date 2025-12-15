@@ -3,33 +3,20 @@ require_once __DIR__ . '/../services/PostLikeService.php';
 
 $postLikeService = new PostLikeService();
 
-// Check if post is liked by user
-Flight::route(
-	'GET /api/posts/@post_id/likes/@user_id',
-	function ($post_id, $user_id) use ($postLikeService) {
-		$isLiked = $postLikeService->isLiked($post_id, $user_id);
-		Flight::json(['liked' => $isLiked]);
-	}
-);
-
 // Like a post
 Flight::route(
-	'POST /api/posts/@post_id/likes',
+	'POST /api/posts/@post_id/like',
 	function ($post_id) use ($postLikeService) {
-		$data = Flight::request()->data->getData();
-
-		$user_id = $data['user_id'] ?? null;
-		if (!$user_id)
-			throw new Exception('User ID is required');
-
-		$postLikeService->like($post_id, $user_id);
+		$user = Flight::get('user');
+		$postLikeService->like($post_id, $user->id);
 	}
-);
+)->addMiddleware(RequireUser::class);
 
 // Unlike a post
 Flight::route(
-	'DELETE /api/posts/@post_id/likes/@user_id',
-	function ($post_id, $user_id) use ($postLikeService) {
-		$postLikeService->unlike($post_id, $user_id);
+	'POST /api/posts/@post_id/unlike',
+	function ($post_id) use ($postLikeService) {
+		$user = Flight::get('user');
+		$postLikeService->unlike($post_id, $user->id);
 	}
-);
+)->addMiddleware(RequireUser::class);

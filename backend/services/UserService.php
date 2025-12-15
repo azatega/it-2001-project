@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/BaseService.php';
 require_once __DIR__ . '/../dao/UserDao.php';
+require_once __DIR__ . '/../config.php';
+
+use Firebase\JWT\JWT;
 
 class UserService extends BaseService
 {
@@ -13,6 +16,22 @@ class UserService extends BaseService
 	public function getByUsername($username)
 	{
 		return $this->dao->getByUsername($username);
+	}
+
+	private function generateToken($user)
+	{
+		// Generate JWT token
+		$jwt_payload = [
+			'user' => $user,
+			'iat' => time(),
+			'exp' => time() + (60 * 60 * 24) // valid for 1 day
+		];
+
+		return JWT::encode(
+			$jwt_payload,
+			Config::JWT_SECRET(),
+			'HS256'
+		);
 	}
 
 	public function register($data)
@@ -35,7 +54,18 @@ class UserService extends BaseService
 		// Hash password before storing
 		$data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
-		return $this->create($data);
+		// Always set role to 'user' for registration
+		$data['role'] = 'user';
+
+		$user = $this->create($data);
+
+		// Remove password from response
+		unset($user['password']);
+
+		// Generate and add JWT token
+		$user['token'] = $this->generateToken($user);
+
+		return $user;
 	}
 
 	public function login($username, $password)
@@ -50,6 +80,10 @@ class UserService extends BaseService
 
 		// Remove password from response
 		unset($user['password']);
+
+		// Generate and add JWT token
+		$user['token'] = $this->generateToken($user);
+
 		return $user;
 	}
 
