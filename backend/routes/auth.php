@@ -44,7 +44,7 @@ Flight::group('/api/auth', function () {
 	Flight::route('GET /whoami', function () {
 		$user = Flight::get('user');
 		Flight::json([
-			'data' => $user
+			'data' => $user // can be null, that's fine
 		]);
-	})->addMiddleware(RequireUser::class);
+	})->addMiddleware(JWTMiddleware::class);
 });

@@ -6,6 +6,13 @@ require __DIR__ . '/middleware/JWTMiddleware.php';
 require __DIR__ . '/middleware/RequireAdmin.php';
 require __DIR__ . '/middleware/RequireUser.php';
 
+// Enable CORS for all routes
+Flight::before('start', function () {
+	Flight::response()->header('Access-Control-Allow-Origin', '*');
+	Flight::response()->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+	Flight::response()->header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+});
+
 Flight::route('/', function () {
 	Flight::json([
 		'message' => 'Blog API Server',
