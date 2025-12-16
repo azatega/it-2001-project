@@ -1,5 +1,5 @@
 <?php
-require_once 'BaseDao.php';
+require_once __DIR__ . '/BaseDao.php';
 
 class CommentDao extends BaseDao
 {
@@ -13,7 +13,13 @@ class CommentDao extends BaseDao
 
 	public function getByPostId($post_id)
 	{
-		$stmt = $this->connection->prepare("SELECT * FROM " . $this->table_name . " WHERE post_id = :post_id ORDER BY `timestamp` ASC");
+		$stmt = $this->connection->prepare(
+			"SELECT c.*, u.username 
+			FROM " . $this->table_name . " c 
+			JOIN users u ON c.user_id = u.id 
+			WHERE c.post_id = :post_id 
+			ORDER BY c.timestamp DESC"
+		);
 		$stmt->bindParam(':post_id', $post_id);
 		$stmt->execute();
 		return $stmt->fetchAll();

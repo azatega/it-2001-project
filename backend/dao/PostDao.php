@@ -1,5 +1,5 @@
 <?php
-require_once 'BaseDao.php';
+require_once __DIR__ . '/BaseDao.php';
 
 class PostDao extends BaseDao
 {
@@ -11,19 +11,36 @@ class PostDao extends BaseDao
 		parent::__construct($this->table_name);
 	}
 
+	public function getAll()
+	{
+		$stmt = $this->connection->prepare("
+			SELECT 
+				p.*,
+				c.id as category_id,
+				c.name as category_name,
+				c.slug as category_slug
+			FROM " . $this->table_name . " p
+			LEFT JOIN categories c ON p.category_id = c.id
+			ORDER BY p.date_published DESC
+		");
+		$stmt->execute();
+		return $stmt->fetchAll();
+	}
+
 	public function getBySlug($slug)
 	{
-		$stmt = $this->connection->prepare("SELECT * FROM " . $this->table_name . " WHERE slug = :slug");
+		$stmt = $this->connection->prepare("
+			SELECT 
+				p.*,
+				c.id as category_id,
+				c.name as category_name,
+				c.slug as category_slug
+			FROM " . $this->table_name . " p
+			LEFT JOIN categories c ON p.category_id = c.id
+			WHERE p.slug = :slug
+		");
 		$stmt->bindParam(':slug', $slug);
 		$stmt->execute();
 		return $stmt->fetch();
-	}
-
-	public function getByCategoryId($category_id)
-	{
-		$stmt = $this->connection->prepare("SELECT * FROM " . $this->table_name . " WHERE category_id = :category_id");
-		$stmt->bindParam(':category_id', $category_id);
-		$stmt->execute();
-		return $stmt->fetchAll();
 	}
 }
