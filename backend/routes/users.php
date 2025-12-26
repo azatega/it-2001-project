@@ -24,7 +24,7 @@ Flight::route(
 
 		// Users can only view their own profile unless they're admin
 		if ($user->role !== 'admin' && $user->id != $id)
-			Flight::halt(403, json_encode(['error' => 'Forbidden: You can only view your own profile']));
+			haltJson(403, 'Forbidden: You can only view your own profile');
 
 		$user_data = $userService->getById($id);
 		if (!$user_data)
@@ -42,7 +42,7 @@ Flight::route(
 
 		// Users can only update their own profile unless they're admin
 		if ($user->role !== 'admin' && $user->id != $id)
-			Flight::halt(403, json_encode(['error' => 'Forbidden: You can only update your own profile']));
+			haltJson(403, 'Forbidden: You can only update your own profile');
 
 		$data = Flight::request()->data->getData();
 
