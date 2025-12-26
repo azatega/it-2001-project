@@ -1,6 +1,11 @@
 # Use PHP 8.2 with Apache
 FROM php:8.2-apache
 
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+	unzip \
+	&& rm -rf /var/lib/apt/lists/*
+
 # Install required PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mysqli
 
