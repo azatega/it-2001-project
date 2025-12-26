@@ -34,6 +34,10 @@ RUN echo '<Directory /var/www/html>\n\
 	Options Indexes FollowSymLinks\n\
 	AllowOverride All\n\
 	Require all granted\n\
+	DirectoryIndex index.php index.html\n\
+	<FilesMatch \.php$>\n\
+	SetHandler application/x-httpd-php\n\
+	</FilesMatch>\n\
 	</Directory>' > /etc/apache2/conf-available/docker-php.conf && \
 	a2enconf docker-php
 
