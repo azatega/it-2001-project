@@ -8,6 +8,10 @@ To run the backend in the backend folder run:
 - `composer install`
 - `php -S localhost:8000`
 
+## Live Demo
+Deployed to [it2001.zatega.dev](https://it2001.zatega.dev/)
+Front end on Cloudflare Pages, back end on Hetzner
+
 ## Tools & Libraries Used (Frontend):
 - [Vite](https://vite.dev/)
 - [React](https://react.dev/)
