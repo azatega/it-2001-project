@@ -10,7 +10,8 @@ To run the backend in the backend folder run:
 
 ## Live Demo
 Deployed to [it2001.zatega.dev](https://it2001.zatega.dev/)
-Front end on Cloudflare Pages, back end on Hetzner
+
+Front end on Cloudflare Pages, back end on Hetzner. Sign up to write comments.
 
 ## Tools & Libraries Used (Frontend):
 - [Vite](https://vite.dev/)
