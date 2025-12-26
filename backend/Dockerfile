@@ -39,6 +39,7 @@ RUN echo '<Directory /var/www/html>\n\
 	AllowOverride All\n\
 	Require all granted\n\
 	DirectoryIndex index.php index.html\n\
+	CGIPassAuth On\n\
 	<FilesMatch \.php$>\n\
 	SetHandler application/x-httpd-php\n\
 	</FilesMatch>\n\
