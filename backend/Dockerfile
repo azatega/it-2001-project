@@ -9,8 +9,12 @@ RUN apt-get update && apt-get install -y \
 # Install required PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mysqli
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+# Configure PHP for Flight framework
+RUN echo "output_buffering = Off" >> /usr/local/etc/php/conf.d/flight.ini && \
+    echo "implicit_flush = On" >> /usr/local/etc/php/conf.d/flight.ini
+
+# Enable Apache mod_rewrite and mod_headers
+RUN a2enmod rewrite headers
 
 # Set working directory
 WORKDIR /var/www/html
