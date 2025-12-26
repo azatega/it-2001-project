@@ -54,11 +54,11 @@ Flight::route(
 		// Get the comment to check ownership
 		$comment = $commentService->getById($id);
 		if (!$comment)
-			Flight::halt(404, json_encode(['error' => 'Comment not found']));
+			haltJson(404, 'Comment not found');
 
 		// Check if user is admin or owner of the comment
 		if ($user->role !== 'admin' && $comment['user_id'] != $user->id)
-			Flight::halt(403, json_encode(['error' => 'Forbidden: You can only update your own comments']));
+			haltJson(403, 'Forbidden: You can only update your own comments');
 
 		$data = Flight::request()->data->getData();
 		$commentService->update($id, $data);
@@ -74,11 +74,11 @@ Flight::route(
 		// Get the comment to check ownership
 		$comment = $commentService->getById($id);
 		if (!$comment)
-			Flight::halt(404, json_encode(['error' => 'Comment not found']));
+			haltJson(404, 'Comment not found');
 
 		// Check if user is admin or owner of the comment
 		if ($user->role !== 'admin' && $comment['user_id'] != $user->id)
-			Flight::halt(403, json_encode(['error' => 'Forbidden: You can only delete your own comments']));
+			haltJson(403, 'Forbidden: You can only delete your own comments');
 
 		$commentService->delete($id);
 	}

@@ -22,7 +22,8 @@ class JWTMiddleware
 					Flight::set('jwt_token', $token);
 				}
 			} catch (\Exception $e) {
-				Flight::halt(401, json_encode(['error' => 'Invalid token: ' . $e->getMessage()]));
+				// Silent fail is fine (considered not logged in)
+				// haltJson(401, 'Invalid token: ' . $e->getMessage());
 			}
 		}
 	}

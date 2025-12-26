@@ -5,7 +5,6 @@ import { RouterProvider } from "react-router/dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./index.css";
-import { Button } from "@/components/ui/button";
 import { Home } from "@/pages/Home";
 import { SinglePost } from "@/pages/SinglePost";
 import { Login } from "@/pages/Login";

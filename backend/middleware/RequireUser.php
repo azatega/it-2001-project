@@ -12,6 +12,6 @@ class RequireUser extends JWTMiddleware
 		// Then check if user is authenticated
 		$user = Flight::get('user');
 		if (!$user)
-			Flight::halt(401, json_encode(['error' => 'Unauthorized: Authentication required']));
+			haltJson(401, 'Unauthorized: Authentication required');
 	}
 }

@@ -17,7 +17,7 @@ Flight::group('/api/auth', function () {
 				'data' => $user
 			]);
 		} catch (Exception $e) {
-			Flight::halt(400, json_encode(['error' => $e->getMessage()]));
+			haltJson(400, $e->getMessage());
 		}
 	});
 
@@ -36,7 +36,7 @@ Flight::group('/api/auth', function () {
 				'data' => $user
 			]);
 		} catch (Exception $e) {
-			Flight::halt(401, json_encode(['error' => $e->getMessage()]));
+			haltJson(401, $e->getMessage());
 		}
 	});
 
