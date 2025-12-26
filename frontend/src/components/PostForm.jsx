@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import {
     Card,
     CardContent,
@@ -9,7 +9,7 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/Field";
 import { FieldError } from "@/components/ui/FieldError";
 import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/components/ui/Textarea";
 import { cn } from "@/lib/utils";
 import { SendIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router";
@@ -20,7 +20,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/Select";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import { DatePicker } from "@/components/ui/DatePicker";
 import { useForm, Controller } from "react-hook-form";

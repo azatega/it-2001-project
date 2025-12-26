@@ -2,7 +2,7 @@ import { PostMeta } from "@/components/PostMeta";
 import { BackButton } from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/components/ui/Textarea";
 import { API_BASE_URL } from "@/lib/constants";
 import {
     ArrowLeft,
