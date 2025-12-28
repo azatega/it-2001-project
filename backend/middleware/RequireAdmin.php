@@ -12,6 +12,6 @@ class RequireAdmin extends JWTMiddleware
 		// Then check if user is admin
 		$user = Flight::get('user');
 		if (!$user || $user->role !== 'admin')
-			Flight::halt(403, json_encode(['error' => 'Forbidden: Admin access required']));
+			haltJson(403, 'Forbidden: Admin access required');
 	}
 }

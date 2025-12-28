@@ -6,6 +6,13 @@ require __DIR__ . '/middleware/JWTMiddleware.php';
 require __DIR__ . '/middleware/RequireAdmin.php';
 require __DIR__ . '/middleware/RequireUser.php';
 
+// Utility function to halt with JSON error
+function haltJson($statusCode, $error)
+{
+	header('Content-Type: application/json');
+	Flight::halt($statusCode, json_encode(['error' => $error]));
+}
+
 // Enable CORS for all routes
 Flight::before('start', function () {
 	Flight::response()->header('Access-Control-Allow-Origin', '*');

@@ -1,19 +1,19 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/Card";
 import {
     Field,
     FieldDescription,
     FieldGroup,
     FieldLabel,
-} from "@/components/ui/field";
+} from "@/components/ui/Field";
 import { FieldError } from "@/components/ui/FieldError";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/Input";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
